@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Github搜索</title>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/main.css">
+    <style>
+        .clicked{
+            background:lightseagreen;
+            color:#fff;
+            border:1px solid #000;
+        }
+        [hidden]{
+            display: none;
+        }
+        button{
+            background: #fff;
+            border:1px solid lightseagreen;
+            color:lightskyblue;
+        }
+        .footer{
+            margin-bottom: 100px;
+        }
+        .biao-page{
+            text-align: center;
+        }
+        .biao-page .page-list button{
+            width: 27px;
+            padding: 2px 5px 0px 5px;
+            margin-left: 5px;
+        }
+        .shortcuts:first-of-type{
+            margin-right: 8px;
+            margin-left: 3px;
+        }
+        .shortcuts button{
+            padding: 3px 5px 1px 5px;
+            margin-left: 8px;
+        }
+        .biao-page >*{
+            display: inline-block;
+        }
+
+        .result-count p{
+            color:#888;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main>
+        <h1>Github用户搜索</h1>
+        <form id="search-form">
+            <input type="text" name="keyword" autofocus>
+            <button class='submit' type="submit"></button>
+        </form>
+        <div class="loading" hidden>
+            <i class="fa fa-spinner fa-spin"></i> 数据加载中
+        </div>
+        <div class="result-count">
+        </div>
+        <div id="user-list">
+        </div>
+        <div class='page-count'></div>
+        <div class="footer">
+            <!-- <div class="biao-page">
+                <span class="shortcuts">
+                    <button class="start">首页</button>
+                    <button class="prev">上一页</button>
+                </span>
+                <span class="page-list">
+                    <button class="biao-page-item clicked">1</button>
+                    <button class="biao-page-item">2</button>
+                    <button class="biao-page-item">3</button>
+                    <button class="biao-page-item">4</button>
+                    <button class="biao-page-item">5</button>
+                    <button class="biao-page-item">6</button>
+                    <button class="biao-page-item">7</button>
+                    <button class="biao-page-item">8</button>
+                    <button class="biao-page-item">9</button>
+                </span>
+                <span class="shortcuts">
+                    <button class="next">下一页</button>
+                    <button class="end">尾页</button>
+                </span>
+            </div> -->
+        </div>
+    </main>
+</body>
+
+</html>
+<script src="./js/rq.js"></script>
+<script src="./js/biaoPage1.0.js"></script>
+<script>
+
+
+
+
+    let userList = document.getElementById('user-list');
+    let form = document.querySelector('form');
+    let result = document.querySelector('.result-count');
+    console.log(result);
+    let val;
+    // let $state;
+    let $currentPage;
+    let $pageEnd;
+
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        excuteLoad();
+        let input = document.querySelector('[name=keyword]');
+        val = input.value;
+
+        let url = `https://api.github.com/search/users?q=${val}`;
+        $.get(url, data => {
+            excuteLoad();
+            render(data);
+        });
+    });
+
+
+    function excuteLoad() {
+        let load = document.querySelector('.loading');
+        load.hidden = !load.hidden;
+    }
+    function render(data) {
+        renderContent(data);
+        renderPageContent(data);
+    }
+    function renderContent(data) {
+        renderSearchResult(data);
+
+        userList.innerHTML = '';
+        data.items && data.items.forEach(it => {
+            let item = document.createElement('div');
+            item.classList.add('item');
+            item.innerHTML = `
+                <div class="avatar">
+                    <img src=${it.avatar_url} alt="">
+                </div>
+                <div class="detail">
+                    <strong>${it.login}</strong>
+                    <div><a href=${it.html_url}>${it.html_url}</a></div>
+                </div>
+            `
+            userList.appendChild(item);
+        })
+    }
+
+
+
+    function renderSearchResult(data) {
+        result.innerHTML = '';
+        let p = document.createElement('p');
+        p.innerHTML = `
+            共${data.total_count}条搜索结果，可显示${data.total_count > 1000 ? 1000 : data.total_count}条搜索结果
+            `
+        result.appendChild(p);
+    }
+
+    function renderPageContent(data) {
+        let footer = document.querySelector('.footer');
+        footer.innerHTML = '';
+        let settings = {
+            selector: '.footer',
+            amount: data.total_count >= 1000 ? 1000 : data.total_count,
+            limit: 30,
+            currentPage: 1,
+            pageLim: 9,
+            onChange: function (state, page) {
+                //     let btn = state.page.buttons[page-1];
+                //     console.log( btn);
+                //     btn.addEventListener('click', e => {
+                //         url = `https://api.github.com/search/users?q=${val}&page=${btn.$page}`
+                //         $.get(url, data => {
+                //             renderContent(data);
+                //         });
+                //     })
+                // $state = state;
+                console.log(state);
+                $currentPage = state.page.currentPage;
+                $pageEnd = state.page.pageEnd;
+            },
+        }
+        console.log($currentPage, $pageEnd);
+        biaoPage.boot(settings);
+        renderPageCount(data);
+
+        let btns = document.querySelectorAll('.biao-page-item');
+        btns.forEach(btn => {
+            btn.addEventListener('click', e => {
+                renderPageCount(data);
+                send(val, btn.$page);
+            });
+        });
+        let btnPrev = document.querySelector('.prev');
+        let btnNext = document.querySelector('.next');
+        let btnStart = document.querySelector('.start');
+        let btnEnd = document.querySelector('.end');
+        // console.log( btnPrev);
+        // console.log( btnNext);
+        // console.log( btnStart);
+        // console.log( btnEnd);
+        let bPage = document.querySelector('.biao-page');
+
+        bPage.addEventListener('click', e => {
+            renderPageCount(data);
+            let content = e.target.textContent;
+            switch (content) {
+                case '首页':
+                    send(val, 1);
+                    break;
+                case '尾页':
+                    send(val, btns.length);
+                    break;
+                case '上一页':
+                    $currentPage == 1 ? send(val, 1) : send(val, $currentPage - 1);
+                    break;
+                case '下一页':
+                    $currentPage == $pageEnd ? send(val, $pageEnd) : send(val, $currentPage + 1);
+                    break;
+            }
+        });
+
+
+    }
+
+    function renderPageCount(data) {
+        // console.log($pageEnd,$currentPage );
+        let pageCount = document.querySelector('.page-count');
+        pageCount.innerHTML = '';
+        pageCount.innerHTML = `
+            <span class="totalPage">共有${$pageEnd}页</span>
+            <span class="currentPage">第${$currentPage}页</span>
+        `
+    }
+
+    function send(keyword, page) {
+        console.log($currentPage, $pageEnd);
+        url = `https://api.github.com/search/users?q=${keyword}&page=${page}`
+        $.get(url, data => {
+            renderContent(data);
+        });
+        // page ?
+        //     url = `https://api.github.com/search/users?q=${keyword}${page}` :
+        //     url = `https://api.github.com/search/users?q=${keyword}`;
+    }
+</script>
+<script>
+
+
+</script>
