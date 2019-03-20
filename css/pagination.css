@@ -1,0 +1,43 @@
+.pagination {
+    position: relative;
+    margin: 0;
+    padding: 20px;
+    height: 28px;
+}
+
+.pagination .pageList {
+    display: inline-block;
+    padding: 0;
+    margin-left: 85px;
+    position: absolute;
+    right: 10px;
+    margin: 0;
+    color: #444;
+}
+
+.pagination a {
+    text-align: center;
+    text-decoration: none;
+    padding: 0.1em 0.5em 0 0.5em;
+    display: inline-block;
+    font-size: 14px;
+    min-width: 15px;
+    min-height: 18px;
+    margin-left: .3em;
+    line-height: 20px;
+}
+
+.pagination .primary-buttons a {
+    /* padding: 0.1em 0.2em 0 0.2em; */
+    color: inherit;
+}
+
+.pagination .active {
+    background: #000;
+    color: #fff !important;
+    border: 1px solid lightgray;
+}
+
+.pagination a.active:hover {
+    cursor: auto;
+}

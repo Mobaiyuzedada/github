@@ -1,0 +1,47 @@
+:root {
+    color: #444;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: .7em;
+}
+
+.user-list {
+    .item {
+        font-size: 0;
+        border: 1px solid rgba(0, 0, 0, .2);
+        box-shadow: 0 0 3px rgba(0, 0, 0, .1);
+        margin-bottom: .5rem;
+        height: 60px;
+        &:first-child {
+            margin-top: 1.5rem;
+        }
+        .avatar {
+            width: 59px;
+        }
+        .detail {
+            width: 80%;
+            color: #aaa;
+            strong {
+                color: #444;
+            }
+            padding: .5em .5em 0em .5em;
+            a {
+                text-decoration: none;
+                color: inherit;
+            }
+            &>* {
+                margin: .1em 0;
+            }
+            div {
+                margin-top: .8em;
+            }
+        }
+    }
+    .item>* {
+        display: inline-block;
+        font-size: 1rem;
+        vertical-align: top;
+    }
+}

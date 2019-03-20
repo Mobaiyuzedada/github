@@ -1,133 +1,53 @@
 :root {
-    font-family: sans-serif;
-    font-size: 14px;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    background: #eee;
-}
-
-main {
-    max-width: 550px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-img {
-    width: 100%;
-    display: block;
+  color: #444;
 }
 
 h1 {
-    text-align: center;
+  text-align: center;
+  margin-bottom: .7em;
 }
 
-form {
-    position: relative;
+.user-list .item {
+  font-size: 0;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: .5rem;
+  height: 60px;
 }
 
-input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 1000px white inset;
-    outline: 0;
+.user-list .item:first-child {
+  margin-top: 1.5rem;
 }
 
-form input {
-    width: 100%;
-    padding: .5em;
-    margin-bottom: 10px;
-    font-size: inherit;
-    outline: 0;
+.user-list .item .avatar {
+  width: 59px;
 }
 
-form button {
-    background: url(../img/bn_srh_1.png) no-repeat 50% 50%;
-    border: none;
-    position: absolute;
-    right: 4px;
-    top: 3px;
-    width: 27px;
-    height: 29px;
-    cursor: pointer;
+.user-list .item .detail {
+  width: 80%;
+  color: #aaa;
+  padding: .5em .5em 0em .5em;
 }
 
-form input:focus {
-    outline: 2px solid rgba(0, 0, 0, .2);
-    border-color: transparent;
+.user-list .item .detail strong {
+  color: #444;
 }
 
-form button:focus {
-    outline: 0;
-    cursor: default;
+.user-list .item .detail a {
+  text-decoration: none;
+  color: inherit;
 }
 
-.item {
-    font-size: 0;
-    border: 1px solid rgba(0, 0, 0, .2);
-    margin-bottom: .4rem;
-    background: #fff;
-    box-shadow: 0px -1px 1px 1px rgba(0, 0, 0, .2);
-    margin-bottom: 10px;
+.user-list .item .detail > * {
+  margin: .1em 0;
 }
 
-#user-list .item>* {
-    display: inline-block;
-    vertical-align: top;
-    font-size: 1rem;
+.user-list .item .detail div {
+  margin-top: .8em;
 }
 
-.item .detail>* {
-    margin: .5em 0;
-}
-
-#user-list .item .avatar {
-    width: 60px;
-    height: 60px;
-}
-
-#user-list .item .detail {
-    width: 83%;
-    color: #aaa;
-    padding: .8em 0em 0em 1em;
-}
-
-.item .detail strong {
-    color: #444;
-}
-
-.item a {
-    color: inherit;
-    text-decoration: none;
-}
-
-.loading {
-    text-align: center;
-    font-size: 22px;
-    margin: 20px 0;
-}
-
-.fa {
-    display: inline-block;
-    font: normal normal normal 14px/1 FontAwesome;
-    font-size: inherit;
-    text-rendering: auto;
-}
-
-.fa-spin {
-    animation: fa-spin 2s infinite linear;
-}
-
-.fa-spinner:before {
-    content: "\f110";
-}
-
-.page-count{
-    margin:1em 0;
-    color:#888;
-}
-.page-count >*{
-    padding: 0px 14px 0px 141px;
+.user-list .item > * {
+  display: inline-block;
+  font-size: 1rem;
+  vertical-align: top;
 }
